@@ -1,4 +1,3 @@
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
  " set runtime path to include Vundle and initialize
@@ -77,6 +76,7 @@ map <C-c><C-c> :BD! <CR>
 "--- End sweet menu
 
 
+set updatetime=150
 let g:airline#extensions#ale#enabled = 1
 
 let g:tagbar_width = 25

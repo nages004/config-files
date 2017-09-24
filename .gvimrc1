@@ -77,6 +77,7 @@ map <f4> :emenu <c-z>
 map <C-c> :BD <CR>
 "--- End sweet menu
 
+set updatetime=150
 nmap <F8> :TagbarToggle<CR>
 let &errorformat="%f:%l:%c: %t%*[^:]:%m,%f:%l: %t%*[^:]:%m," . &errorformat
 let g:ctrlp_map = '<C-a>'
