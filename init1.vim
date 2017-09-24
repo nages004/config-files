@@ -1,3 +1,4 @@
+
 set nocompatible              " be iMproved, required
 filetype off                  " required
  " set runtime path to include Vundle and initialize
@@ -6,7 +7,7 @@ call vundle#rc()
 " This is the Vundle package, which can be found on GitHub.
 " " For GitHub repos, you specify plugins using the
 " " 'user/repository' format
-	Plugin 'gmarik/vundle'
+    Plugin 'VundleVim/Vundle.vim'
 "
 	filetype plugin indent on
 "  We could also add repositories with a ".git" extension
@@ -21,11 +22,15 @@ call vundle#rc()
 	Plugin 'airblade/vim-gitgutter'
 	Plugin 'junegunn/goyo.vim'
 	Plugin 'reedes/vim-pencil'
-    Plugin 'shougo/deoplete.nvim'
 	Plugin 'bling/vim-airline'
 	Plugin 'majutsushi/tagbar'
 	Plugin 'liuchengxu/space-vim-dark'
-    
+    Plugin 'shougo/deoplete.nvim'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+" "
+" "
 " set cursorline
 set wildmenu
 set lazyredraw
