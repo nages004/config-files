@@ -2,7 +2,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
  " set runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 " This is the Vundle package, which can be found on GitHub.
 " " For GitHub repos, you specify plugins using the
 " " 'user/repository' format
