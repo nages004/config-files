@@ -9,7 +9,6 @@ call vundle#rc()
 " " 'user/repository' format
     Plugin 'VundleVim/Vundle.vim'
 "
-	filetype plugin indent on
 "  We could also add repositories with a ".git" extension
 	Plugin 'scrooloose/nerdtree.git'
 	Plugin 'w0rp/ale'
