@@ -1,14 +1,10 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-" set runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
 call vundle#begin()
-" This is the Vundle package, which can be found on GitHub.
-" " For GitHub repos, you specify plugins using the
-" " 'user/repository' format
 Plugin 'VundleVim/Vundle.vim'
-"
-"  We could also add repositories with a ".git" extension
+Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'w0rp/ale'
 Plugin 'kien/ctrlp.vim'
@@ -36,8 +32,6 @@ Plugin 'Chiel92/vim-autoformat'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
-" "
-" "
 " set cursorline
 set wildmenu
 set lazyredraw
@@ -65,7 +59,6 @@ hi! SpellBad ctermfg=196 ctermbg=235
 hi! SpellCap ctermfg=110 ctermbg=235
 hi! SpellRare ctermfg=218 ctermbg=235
 hi! SpellLocal ctermfg=166 ctermbg=235
-"setlocal spell  "Enables spell checking (CURRENTLY DISABLED because it's kinda annoying). Make sure to uncomment the next line if you use this.
 highlight NonText ctermbg=none
 autocmd BufRead,BufNewFile * syn match parens /[{}]/ | hi parens ctermfg=68
 autocmd BufRead,BufNewFile * syn match parenhs /[()]/ | hi parenhs ctermfg=44
@@ -166,48 +159,8 @@ endfunction
 nnoremap <silent><BS> :call Delete_key()<CR>
 "" Enable snipMate compatibility feature.
 let g:neosnippet#enable_snipmate_compatibility = 1
-
 " Tell Neosnippet about the other snippets
 let g:neosnippet#enable_snipmate_compatibility = 1
-set rtp^="/Users/nages004/.opam/system/share/ocp-indent/vim"
-
-" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam config var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-let s:opam_configuration = {}
-
-function! OpamConfOcpIndent()
-    execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-    execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-function! OpamConfMerlin()
-    let l:dir = s:opam_share_dir . "/merlin/vim"
-    execute "set rtp+=" . l:dir
-endfunction
-let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-for tool in s:opam_packages
-    " Respect package order (merlin should be after ocp-index)
-    if count(s:opam_available_tools, tool) > 0
-        call s:opam_configuration[tool]()
-    endif
-endfor
-" ## end of OPAM user-setup addition for vim / base ## keep this line
-" ## added by OPAM user-setup for vim / ocp-indent ## 0f401487b6e6e6e397fa227393008a3e ## you can edit, but keep this line
-if count(s:opam_available_tools,"ocp-indent") == 0
-    source "/Users/nages004/.opam/system/share/vim/syntax/ocp-indent.vim"
-endif
-" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
 let g:UltiSnipsExpandTrigger="<leader><leader>"
 let g:SuperTabDefaultCompletionType = "<c-n>"
 " close the preview window when you're not using it
