@@ -33,6 +33,7 @@ Plugin 'ervandew/supertab'
 Plugin 'Shougo/neosnippet'
 Plugin 'shougo/neosnippet-snippets'
 Plugin 'Chiel92/vim-autoformat'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " "
@@ -87,19 +88,20 @@ map <f4> :emenu <c-z>
 
 " Add brackets with closing bracket
 inoremap [ []<Left>
-inoremap < <><Left>
+inoremap " ""<Left>
+inoremap ' ""<Left>
 inoremap ( ()<Left>
 inoremap { {<CR>}<Esc>O
 let mapleader = ","
 set updatetime=150
-au BufWrite * :Autoformat
+" au BufWrite * :Autoformat
+map <leader>= :Autoformat <CR>
 let g:airline#extensions#ale#enabled = 1
 let g:deoplete#enable_at_startup = 1
 let g:tagbar_width = 25
 map <C-c> :BD! <CR>
 map <leader><leader>v :TagbarToggle<CR>
 let &errorformat="%f:%l:%c: %t%*[^:]:%m,%f:%l: %t%*[^:]:%m," . &errorformat
-" let g:ctrlp_map = '<C-a>'
 nnoremap <leader>p :CtrlP<CR>
 let g:ctrlp_cmd = 'CtrlP'
 nnoremap <leader>n :NERDTreeToggle <CR>
@@ -137,7 +139,6 @@ map <F5> :setlocal spell! spelllang=en_gb<CR>
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-" let g:deoplete#enable_at_startup = 1
 nnoremap <leader>j a<CR><Esc>k$
 nnoremap <leader>m :below 14sp term://$SHELL<cr>i
 tnoremap <Esc> <C-\><C-n>
@@ -163,47 +164,53 @@ function! Delete_key(...)
     endif
 endfunction
 nnoremap <silent><BS> :call Delete_key()<CR>
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-" deoplete tab-complete
-"use <tab> for completion
-function! TabWrap()
-    if pumvisible()
-        return "\<C-N>"
-    elseif strpart( getline('.'), 0, col('.') - 1 ) =~ '^\s*$'
-        return "\<tab>"
-    elseif &omnifunc !~ ''
-        return "\<C-X>\<C-O>"
-    else
-        return "\<C-N>"
-    endif
-endfunction
-let g:formatter_yapf_style = 'pep8'
-" power tab
-imap <silent><expr><tab> TabWrap()
-
-" Enter: complete&close popup if visible (so next Enter works); else: break undo
-inoremap <silent><expr> <Cr> pumvisible() ?
-            \ deoplete#mappings#close_popup() : "<C-g>u<Cr>"
-
-" Ctrl-Space: summon FULL (synced) autocompletion
-inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
-
-" Escape: exit autocompletion, go to Normal mode
-inoremap <silent><expr> <Esc> pumvisible() ? "<C-e><Esc>" : "<Esc>"
-let g:deoplete#disable_auto_complete = 1
-let b:SuperTabDisabled = 1
-inoremap <silent><expr> <Tab>
-            \ pumvisible() ? "\<C-n>" : deoplete#manual_complete()
-autocmd CompleteDone * pclose!
-let g:SuperTabDefaultCompletionType = "<c-n>"
 "" Enable snipMate compatibility feature.
 let g:neosnippet#enable_snipmate_compatibility = 1
 
 " Tell Neosnippet about the other snippets
 let g:neosnippet#enable_snipmate_compatibility = 1
+set rtp^="/Users/nages004/.opam/system/share/ocp-indent/vim"
 
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+    execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+    execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+    let l:dir = s:opam_share_dir . "/merlin/vim"
+    execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+    " Respect package order (merlin should be after ocp-index)
+    if count(s:opam_available_tools, tool) > 0
+        call s:opam_configuration[tool]()
+    endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
+" ## added by OPAM user-setup for vim / ocp-indent ## 0f401487b6e6e6e397fa227393008a3e ## you can edit, but keep this line
+if count(s:opam_available_tools,"ocp-indent") == 0
+    source "/Users/nages004/.opam/system/share/vim/syntax/ocp-indent.vim"
+endif
+" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line
+let g:UltiSnipsExpandTrigger="<leader><leader>"
+let g:SuperTabDefaultCompletionType = "<c-n>"
+" close the preview window when you're not using it
+let g:SuperTabClosePreviewOnPopupClose = 1
+" or just disable the preview entirely
+set completeopt-=preview
